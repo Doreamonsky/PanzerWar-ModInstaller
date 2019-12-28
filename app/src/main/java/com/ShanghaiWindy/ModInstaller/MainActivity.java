@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import me.rosuh.filepicker.config.FilePickerManager;
 
 import android.os.Environment;
 import android.provider.ContactsContract;
@@ -28,6 +29,7 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
@@ -53,14 +55,17 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
         FloatingActionButton fab = findViewById(R.id.fab);
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("*/*");
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                startActivityForResult(Intent.createChooser(intent, "选择一个模组包进行安装"), 0);
+                FilePickerManager.INSTANCE.from(MainActivity.this).forResult(FilePickerManager.REQUEST_CODE);
+//                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//                intent.setType("*/*");
+//                intent.addCategory(Intent.CATEGORY_OPENABLE);
+//                startActivityForResult(Intent.createChooser(intent, "选择一个模组包进行安装"), 0);
             }
         });
 
@@ -69,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         viewModBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent page = new Intent(MainActivity.this,ModList.class);
+                Intent page = new Intent(MainActivity.this, ModList.class);
                 startActivity(page);
             }
         });
@@ -85,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button downloadModBtn  = findViewById(R.id.downloadModBtn);
+        Button downloadModBtn = findViewById(R.id.downloadModBtn);
         downloadModBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,22 +114,22 @@ public class MainActivity extends AppCompatActivity {
         Uri uri = intent.getData();
 
         if (uri != null) {
-            CopyModPack(uri);
+            CopyModPack(uri,true);
         }
     }
 
-    protected void CopyModPack(Uri uri) {
-        Log.e("main",uri.toString());
-        String selectPath =  Util.getPath(this, uri);
+    protected void CopyModPack(Uri uri,boolean isRequireParese) {
+        Log.e("main", uri.toString());
+        String selectPath = isRequireParese?Util.getPath(this, uri):uri.getPath();
 
         TextView pathLabel = findViewById(R.id.pathLabel);
 
-        if(selectPath.indexOf("modpack")==-1 && selectPath.indexOf("zip")==-1){
-            Toast.makeText(getApplicationContext(),R.string.invalidFile, Toast.LENGTH_LONG).show();
+        if (selectPath.indexOf("modpack") == -1 && selectPath.indexOf("zip") == -1) {
+            Toast.makeText(getApplicationContext(), R.string.invalidFile, Toast.LENGTH_LONG).show();
             return;
         }
 
-        Toast.makeText(getApplicationContext(), String.format("%s %s",R.string.select_file_path,selectPath), Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), String.format("%s %s", R.string.select_file_path, selectPath), Toast.LENGTH_LONG).show();
 
         // 模组文件
         File modPackFile = new File(selectPath);
@@ -132,14 +137,14 @@ public class MainActivity extends AppCompatActivity {
         // 安装目录路径
         String modPath = Environment.getExternalStorageDirectory().getPath() + "/Android/data/com.shanghaiwindy.PanzerWarOpenSource/files/mods/Installs/";
 
-        if(!new File(modPath).exists()){
+        if (!new File(modPath).exists()) {
             pathLabel.setText(R.string.folder_not_found);
             return;
         }
 
-        File destFile = new File(modPath+modPackFile.getName());
+        File destFile = new File(modPath + modPackFile.getName());
 
-        if(destFile.exists()){
+        if (destFile.exists()) {
             destFile.delete();
         }
 
@@ -155,12 +160,12 @@ public class MainActivity extends AppCompatActivity {
             isSuccess = false;
         }
 
-        if(isSuccess){
+        if (isSuccess) {
             pathLabel.setText("文件安装至路径:" + destFile.getAbsolutePath());
             Toast.makeText(this, "安装成功!", Toast.LENGTH_SHORT).show();
             modPackFile.delete();
-        }else{
-            pathLabel.setText("复制失败！请检查应用权限！错误源："+uri.toString());
+        } else {
+            pathLabel.setText("复制失败！请检查应用权限！错误源：" + uri.toString());
         }
     }
 
@@ -179,11 +184,20 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        switch (requestCode) {
+//            case 0:
+//                if (resultCode == RESULT_OK) {
+//                    Uri uri = data.getData();
+//                    CopyModPack(uri);
+//                }
+//                break;
+//        }
         switch (requestCode) {
-            case 0:
-                if (resultCode == RESULT_OK) {
-                    Uri uri = data.getData();
-                    CopyModPack(uri);
+            case FilePickerManager.REQUEST_CODE:
+                List<String> files = FilePickerManager.INSTANCE.obtainData();
+                for (String filePath : files) {
+                    Uri uri = Uri.parse(filePath);
+                    CopyModPack(uri,false);
                 }
                 break;
         }
