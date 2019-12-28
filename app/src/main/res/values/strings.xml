@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Panzer War Mod Installer</string>
+    <string name="action_settings">Setting</string>
+    <string name="select_fileTip">Click right-bottom button to select mod to install.</string>
+    <string name="view_mods">Click to view installed mods</string>
+    <string name="invalidFile">Invalid File</string>
+    <string name="lanuchGame">Lanuch Game</string>
+    <string name="folder_not_found">Folder not found.Plz ensure you have installed Panzer War.</string>
+    <string name="select_file_path">Select File:</string>
+    <string name="downloadModBtn">Download Mods</string>
+    <string name="joinChatBtn">Join QQ Chat Group</string>
+</resources>

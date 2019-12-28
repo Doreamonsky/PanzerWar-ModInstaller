@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">装甲纷争-模组安装器</string>
+    <string name="action_settings" >设置</string>
+    <string name="select_fileTip">点击右下角按钮选择ModPack文件</string>
+    <string name="view_mods" >查看已装模组</string>
+    <string name="invalidFile">无效文件</string>
+    <string name="lanuchGame">启动游戏</string>
+    <string name="folder_not_found">无法找到装甲纷争目录。</string>
+    <string name="select_file_path">选择的文件</string>
+    <string name="downloadModBtn">网站下载模组</string>
+    <string name="joinChatBtn">加群下载模组</string>
+</resources>
