@@ -9,4 +9,6 @@
     <string name="select_file_path">Select File:</string>
     <string name="downloadModBtn">Download Mods</string>
     <string name="joinChatBtn">Join QQ Chat Group</string>
+    <string name="copy_failed">Ops! Copy file failed.</string>
+    <string name="copy_success">Copy File Succeed!</string>
 </resources>

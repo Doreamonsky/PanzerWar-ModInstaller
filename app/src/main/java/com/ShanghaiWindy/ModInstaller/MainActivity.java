@@ -6,33 +6,32 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.aditya.filebrowser.Constants;
+import com.aditya.filebrowser.FileChooser;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
-import me.rosuh.filepicker.config.FilePickerManager;
-
-import android.os.Environment;
-import android.provider.ContactsContract;
-import android.util.Log;
-import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.List;
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final  int PICK_FILE_REQUEST =2;
 
     private static final int REQUEST_PERMISSION_CODE = 1;
 
@@ -61,11 +60,11 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FilePickerManager.INSTANCE.from(MainActivity.this).forResult(FilePickerManager.REQUEST_CODE);
-//                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-//                intent.setType("*/*");
-//                intent.addCategory(Intent.CATEGORY_OPENABLE);
-//                startActivityForResult(Intent.createChooser(intent, "选择一个模组包进行安装"), 0);
+                Intent intent = new Intent(getApplicationContext(), FileChooser.class);
+                intent.putExtra(Constants.SELECTION_MODE, Constants.SELECTION_MODES.MULTIPLE_SELECTION.ordinal());
+                intent.putExtra(Constants.ALLOWED_FILE_EXTENSIONS, "umodpack;modpack;zip;;");
+
+                startActivityForResult(intent, PICK_FILE_REQUEST);
             }
         });
 
@@ -114,13 +113,13 @@ public class MainActivity extends AppCompatActivity {
         Uri uri = intent.getData();
 
         if (uri != null) {
-            CopyModPack(uri,true);
+            CopyModPack(uri, true);
         }
     }
 
-    protected void CopyModPack(Uri uri,boolean isRequireParese) {
+    protected void CopyModPack(Uri uri, boolean isRequireParese) {
         Log.e("main", uri.toString());
-        String selectPath = isRequireParese?Util.getPath(this, uri):uri.getPath();
+        String selectPath = isRequireParese ? Util.getPath(this, uri) : uri.getPath();
 
         TextView pathLabel = findViewById(R.id.pathLabel);
 
@@ -154,18 +153,18 @@ public class MainActivity extends AppCompatActivity {
             Util.copyFile(modPackFile, destFile);
         } catch (IOException e) {
             Log.e("main", "Copy Failed! Orz! Ops!");
-            Toast.makeText(this, "拷贝失败!Ops!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.copy_failed, Toast.LENGTH_SHORT).show();
             e.printStackTrace();
 
             isSuccess = false;
         }
 
         if (isSuccess) {
-            pathLabel.setText("文件安装至路径:" + destFile.getAbsolutePath());
-            Toast.makeText(this, "安装成功!", Toast.LENGTH_SHORT).show();
+            pathLabel.setText(String.format("%s %s", R.string.copy_success, destFile.getAbsolutePath())); //文件安装至路径
+            Toast.makeText(this, R.string.copy_success, Toast.LENGTH_SHORT).show();
             modPackFile.delete();
         } else {
-            pathLabel.setText("复制失败！请检查应用权限！错误源：" + uri.toString());
+            pathLabel.setText(R.string.copy_failed);
         }
     }
 
@@ -184,23 +183,15 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        switch (requestCode) {
-//            case 0:
-//                if (resultCode == RESULT_OK) {
-//                    Uri uri = data.getData();
-//                    CopyModPack(uri);
-//                }
-//                break;
-//        }
-        switch (requestCode) {
-            case FilePickerManager.REQUEST_CODE:
-                List<String> files = FilePickerManager.INSTANCE.obtainData();
-                for (String filePath : files) {
-                    Uri uri = Uri.parse(filePath);
-                    CopyModPack(uri,false);
+        if (requestCode == PICK_FILE_REQUEST && data!=null) {
+            if (resultCode == RESULT_OK) {
+                ArrayList<Uri> selectedFiles  = data.getParcelableArrayListExtra(Constants.SELECTED_ITEMS);
+                for (Uri file : selectedFiles) {
+                    CopyModPack(file, false);
                 }
-                break;
+            }
         }
+
         super.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -217,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+//        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -229,9 +220,9 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }

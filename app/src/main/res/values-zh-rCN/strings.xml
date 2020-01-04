@@ -10,4 +10,6 @@
     <string name="select_file_path">选择的文件</string>
     <string name="downloadModBtn">网站下载模组</string>
     <string name="joinChatBtn">加群下载模组</string>
+    <string name="copy_failed">糟糕！复制文件失败！</string>
+    <string name="copy_success">安装文件成功！</string>
 </resources>
