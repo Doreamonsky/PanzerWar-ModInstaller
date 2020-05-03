@@ -15,11 +15,16 @@
     <string name="viewCommunity">讨论与攻略</string>
     <string name="title_downloadlink_list">下载列表</string>
     <string name="title_downloadlink_detail">详情</string>
-    <string name="NoFolder">无文件夹</string>
-    <string name="NoFile">未安装</string>
+    <string name="NoFolder">无读写权限</string>
+    <string name="NoFile">未下载</string>
     <string name="Downloaded">已下载</string>
     <string name="Installed">已安装</string>
     <string name="LoadingList">加载列表中...</string>
     <string name="DownloadComplete">下载成功!</string>
     <string name="downloadInitalize">下载初始化中...</string>
+    <string name="description">介绍:</string>
+    <string name="size">大小:</string>
+    <string name="author">作者:</string>
+    <string name="editTime">更新时间:</string>
+    <string name="DownloadType">点击红色按钮进行下载!</string>
 </resources>

@@ -38,8 +38,8 @@ import java.util.List;
  * has different presentations for handset and tablet-size devices. On
  * handsets, the activity presents a list of items, which when touched,
  * lead to a {@link DownloadLinkDetailActivity} representing
- * item details. On tablets, the activity presents the list of items and
- * item details side-by-side using two vertical panes.
+ * item description. On tablets, the activity presents the list of items and
+ * item description side-by-side using two vertical panes.
  */
 public class DownloadLinkListActivity extends AppCompatActivity {
 
@@ -95,6 +95,7 @@ public class DownloadLinkListActivity extends AppCompatActivity {
 
         List<String> reporisties = Arrays.asList("https://res.waroftanks.cn/", "https://baomage.github.io/BaoMaGe/");
 
+
         for (Iterator<String> it = reporisties.iterator(); it.hasNext(); ) {
             final String jsonUrl = it.next();
 
@@ -108,9 +109,18 @@ public class DownloadLinkListActivity extends AppCompatActivity {
                             JSONObject downloadLink = downloadLinks.getJSONObject(i);
                             String packName = downloadLink.getString("packName");
                             String link = jsonUrl + downloadLink.getString("link");
+
                             String editTime = downloadLink.getString("editTime");
+                            editTime = getResources().getText(R.string.editTime) + editTime;
+
                             String size = downloadLink.getString("size");
+                            size = getResources().getText(R.string.size) + size + "mb";
+
                             String description = downloadLink.getString("description");
+                            description = getResources().getText(R.string.description) + description;
+
+                            String author = downloadLink.getString("author");
+                            author = getResources().getText(R.string.author) + author;
 
                             if (!packName.contains("Android")) {
                                 continue;
@@ -121,7 +131,6 @@ public class DownloadLinkListActivity extends AppCompatActivity {
                             displayName = displayName.replace("_modpack", "");
                             displayName = displayName.replace("Vehicle-", "");
 
-                            String detail = String.format(" Description: %s \n\n\n Edit Time:%s \n Size:%s mb", description, editTime, size);
 
                             Util.FileState fileState = Util.getModFileState(packName);
                             int installStateText = R.string.NoFolder;
@@ -132,18 +141,18 @@ public class DownloadLinkListActivity extends AppCompatActivity {
                                     break;
                                 case NoFile:
                                     installStateText = R.string.NoFile;
-                                    ;
                                     break;
                                 case Downloaded:
                                     installStateText = R.string.Downloaded;
-                                    ;
                                     break;
                                 case Installed:
                                     installStateText = R.string.Installed;
-                                    ;
                                     break;
                             }
-                            LinkContent.addItem(new LinkContent.LinkItem(Integer.toString(i), fileState, installStateText, displayName, detail, link, packName));
+
+                            int id = LinkContent.ITEMS.size() + 1;
+
+                            LinkContent.addItem(new LinkContent.LinkItem(Integer.toString(id), fileState, installStateText, displayName, description, link, packName, size, author, editTime));
                         }
 
                         simpleItemRecyclerViewAdapter.notifyDataSetChanged();
@@ -155,6 +164,7 @@ public class DownloadLinkListActivity extends AppCompatActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     System.out.println("发生了一个错误！");
+
                     error.printStackTrace();
                 }
             });

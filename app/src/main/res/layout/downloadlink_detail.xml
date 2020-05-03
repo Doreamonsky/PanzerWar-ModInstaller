@@ -7,6 +7,7 @@
     android:orientation="vertical"
     android:paddingTop="20dp">
 
+
     <TextView
         android:id="@+id/progress"
         android:layout_width="match_parent"
@@ -24,15 +25,83 @@
         android:progress="1"
         android:visibility="gone" />
 
-    <TextView xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/downloadlink_detail"
-        style="?android:attr/textAppearanceLarge"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/download_guide"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="95"
-        android:padding="16dp"
-        android:textIsSelectable="true"
-        tools:context=".DownloadLinkDetailFragment" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="16dp"
+            android:text="@string/DownloadType"
+            android:textColor="@color/bb_darkBackgroundColor"
+            android:textIsSelectable="true"
+            android:textSize="16dp" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="8dp">
+
+        <TextView
+            android:id="@+id/size"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="16dp"
+            android:text="Size:2MB"
+            android:textColor="@color/bb_darkBackgroundColor"
+            android:textIsSelectable="true"
+            android:textSize="16dp" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="8dp"
+        android:soundEffectsEnabled="true">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/author"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Author:Nameless"
+                android:textColor="@color/bb_darkBackgroundColor"
+                android:textIsSelectable="true"
+                android:textSize="24dp" />
+
+            <TextView
+                android:id="@+id/editTime"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Edit:2020/12"
+                android:textIsSelectable="true"
+                android:textSize="14dp" />
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="16dp"
+                android:text="Description:This is a template text!"
+                android:textIsSelectable="true"
+                android:textSize="18dp" />
+
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
 
 </LinearLayout>

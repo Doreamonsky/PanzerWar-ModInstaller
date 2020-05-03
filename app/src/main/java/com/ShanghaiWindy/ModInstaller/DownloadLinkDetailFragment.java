@@ -64,7 +64,16 @@ public class DownloadLinkDetailFragment extends Fragment {
 
         // Show the dummy displayName as text in a TextView.
         if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.downloadlink_detail)).setText(mItem.details);
+            ((TextView) rootView.findViewById(R.id.author)).setText(mItem.author);
+            ((TextView) rootView.findViewById(R.id.editTime)).setText(mItem.editTime);
+            ((TextView) rootView.findViewById(R.id.description)).setText(mItem.description);
+            ((TextView) rootView.findViewById(R.id.size)).setText(mItem.size);
+
+            if (mItem.fileState == Util.FileState.NoFile) {
+                rootView.findViewById(R.id.download_guide).setVisibility(View.VISIBLE);
+            } else {
+                rootView.findViewById(R.id.download_guide).setVisibility(View.GONE);
+            }
         }
 
         return rootView;

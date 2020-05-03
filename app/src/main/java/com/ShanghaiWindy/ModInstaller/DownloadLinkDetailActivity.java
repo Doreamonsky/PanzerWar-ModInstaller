@@ -24,7 +24,7 @@ import android.widget.TextView;
 /**
  * An activity representing a single DownloadLink detail screen. This
  * activity is only used on narrow width devices. On tablet-size devices,
- * item details are presented side-by-side with a list of items
+ * item description are presented side-by-side with a list of items
  * in a {@link DownloadLinkListActivity}.
  */
 public class DownloadLinkDetailActivity extends AppCompatActivity {
@@ -134,7 +134,7 @@ public class DownloadLinkDetailActivity extends AppCompatActivity {
         if (id == android.R.id.home) {
             // This ID represents the Home or Up button. In the case of this
             // activity, the Up button is shown. For
-            // more details, see the Navigation pattern on Android Design:
+            // more description, see the Navigation pattern on Android Design:
             //
             // http://developer.android.com/design/patterns/navigation.html#up-vs-back
             //
