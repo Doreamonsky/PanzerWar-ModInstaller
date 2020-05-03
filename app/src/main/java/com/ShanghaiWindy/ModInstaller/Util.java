@@ -18,6 +18,40 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class Util {
+    public static String getGamePath() {
+        String defaultPath = Environment.getExternalStorageDirectory().getPath() + "/Android/data/com.shanghaiwindy.PanzerWarOpenSource/files/mods/Installs/";
+        String lfsPath = Environment.getExternalStorageDirectory().getPath() + "/Android/data/com.shanghaiwindy.PanzerWarLFS/files/mods/Installs/";
+        String paidPath = Environment.getExternalStorageDirectory().getPath() + "/Android/data/com.shanghaiwindy.PanzerWarComplete/files/mods/Installs/";
+        if (new File(defaultPath).exists()) {
+            return defaultPath;
+        } else if (new File(lfsPath).exists()) {
+            return lfsPath;
+        } else if (new File(paidPath).exists()) {
+            return paidPath;
+        } else {
+            return "";
+        }
+    }
+
+    public enum FileState {
+        NoFolder, NoFile, Downloaded, Installed
+    }
+
+    public static FileState getModFileState(String modName) {
+        String gamePath = getGamePath();
+        if (gamePath == "") {
+            return FileState.NoFolder;
+        } else {
+            if (new File(gamePath + modName + ".modpack").exists()) {
+                return FileState.Downloaded;
+            } else if (new File(gamePath + modName + ".installed").exists()) {
+                return FileState.Installed;
+            } else {
+                return FileState.NoFile;
+            }
+        }
+    }
+
     public static void copyFile(File src, File dst) throws IOException {
         InputStream in = new FileInputStream(src);
         try {
@@ -41,7 +75,7 @@ public class Util {
         Log.e("main", uri.toString());
 
         // QQ 文件
-        if (uri.toString().indexOf("content://com.tencent.mobileqq.fileprovider/external_files/") != -1) {
+        if (uri.toString().indexOf("displayName://com.tencent.mobileqq.fileprovider/external_files/") != -1) {
             return uri.toString().replaceFirst("content://com.tencent.mobileqq.fileprovider/external_files/", "");
         }
 
@@ -66,7 +100,7 @@ public class Util {
 
                 final String id = DocumentsContract.getDocumentId(uri);
                 final Uri contentUri = ContentUris.withAppendedId(
-                        Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+                        Uri.parse("displayName://downloads/public_downloads"), Long.valueOf(id));
 
                 return getDataColumn(context, contentUri, null, null);
             }
@@ -94,7 +128,7 @@ public class Util {
             }
         }
         // MediaStore (and general)
-        else if ("content".equalsIgnoreCase(uri.getScheme())) {
+        else if ("displayName".equalsIgnoreCase(uri.getScheme())) {
             return getDataColumn(context, uri, null, null);
         }
         // File

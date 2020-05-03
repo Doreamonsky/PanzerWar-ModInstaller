@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingTop="20dp">
+
+    <TextView
+        android:id="@+id/progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/downloadInitalize"
+        android:textSize="15dp"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/downloadProgressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        android:progress="1"
+        android:visibility="gone" />
+
+    <TextView xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/downloadlink_detail"
+        style="?android:attr/textAppearanceLarge"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="95"
+        android:padding="16dp"
+        android:textIsSelectable="true"
+        tools:context=".DownloadLinkDetailFragment" />
+
+
+</LinearLayout>
+
+
+

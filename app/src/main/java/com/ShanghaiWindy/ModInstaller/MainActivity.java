@@ -1,6 +1,7 @@
 package com.ShanghaiWindy.ModInstaller;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -23,15 +24,20 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-import androidx.annotation.NonNull;
+//import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 
+import com.google.android.material.snackbar.Snackbar;
+import com.liulishuo.filedownloader.FileDownloader;
+import com.taptap.sdk.*;
+
 public class MainActivity extends AppCompatActivity {
 
-    private static final  int PICK_FILE_REQUEST =2;
+    private static final int PICK_FILE_REQUEST = 2;
 
     private static final int REQUEST_PERMISSION_CODE = 1;
 
@@ -54,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // 下载初始化
+        FileDownloader.setup(this);
 
         FloatingActionButton fab = findViewById(R.id.fab);
 
@@ -84,8 +92,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 PackageManager packageManager = getPackageManager();
-                Intent intent = packageManager.getLaunchIntentForPackage("com.shanghaiwindy.PanzerWarOpenSource");
-                startActivity(intent);
+
+                if (hasPackage(getApplicationContext(), "com.shanghaiwindy.PanzerWarOpenSource")) {
+                    Intent intent = packageManager.getLaunchIntentForPackage("com.shanghaiwindy.PanzerWarOpenSource");
+                    startActivity(intent);
+                } else if (hasPackage(getApplicationContext(), "com.shanghaiwindy.PanzerWarLFS")) {
+                    Intent intent = packageManager.getLaunchIntentForPackage("com.shanghaiwindy.PanzerWarLFS");
+                    startActivity(intent);
+                } else if (hasPackage(getApplicationContext(), "com.shanghaiwindy.PanzerWarComplete")) {
+                    Intent intent = packageManager.getLaunchIntentForPackage("com.shanghaiwindy.PanzerWarComplete");
+                    startActivity(intent);
+                }
             }
         });
 
@@ -93,18 +110,12 @@ public class MainActivity extends AppCompatActivity {
         downloadModBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setData(Uri.parse("https://github.com/Doreamonsky/Panzer-War-Lit-Mod/issues/59"));
-                intent.setAction(Intent.ACTION_VIEW);
-                startActivity(intent);
-            }
-        });
-
-        Button joinChatgroupBtn = findViewById(R.id.joinChatBtn);
-        joinChatgroupBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                joinQQGroup("6MATKZTKhof7jO8TeesxvP-DpY62czgF");
+//                Intent intent = new Intent();
+//                intent.setData(Uri.parse("http://yr6xv3.coding-pages.com/docs/"));
+//                intent.setAction(Intent.ACTION_VIEW);
+//                startActivity(intent);
+                Intent page = new Intent(MainActivity.this, DownloadLinkListActivity.class);
+                startActivity(page);
             }
         });
 
@@ -115,6 +126,22 @@ public class MainActivity extends AppCompatActivity {
         if (uri != null) {
             CopyModPack(uri, true);
         }
+
+        // 访问社区
+        Button viewCommunityBtn = findViewById(R.id.viewCommunityBtn);
+        viewCommunityBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TapTapSdk.Config config = new TapTapSdk.Config();
+                config.appid = "145106";
+                config.orientation = TapTapSdk.ORIENTATION_PORTRAIT;
+                config.uri = null;
+                config.locale = Locale.CHINA;
+                config.site = "cn";
+                TapTapSdk.openTapTapForum(MainActivity.this, config);
+            }
+        });
+
     }
 
     protected void CopyModPack(Uri uri, boolean isRequireParese) {
@@ -134,11 +161,11 @@ public class MainActivity extends AppCompatActivity {
         File modPackFile = new File(selectPath);
 
         // 安装目录路径
-        String modPath = Environment.getExternalStorageDirectory().getPath() + "/Android/data/com.shanghaiwindy.PanzerWarOpenSource/files/mods/Installs/";
+        String modPath = Util.getGamePath();
 
-        if (!new File(modPath).exists()) {
+        if (modPath == "") {
             pathLabel.setText(R.string.folder_not_found);
-            return;
+            Toast.makeText(getApplicationContext(), R.string.folder_not_found, Toast.LENGTH_LONG).show();
         }
 
         File destFile = new File(modPath + modPackFile.getName());
@@ -168,6 +195,20 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    protected boolean hasPackage(Context context, String pkgName) {
+        if (null == context || null == pkgName) {
+            return false;
+        }
+
+        boolean val = true;
+        try {
+            context.getPackageManager().getPackageInfo(pkgName, PackageManager.GET_GIDS);
+        } catch (PackageManager.NameNotFoundException e) {
+            val = false;
+        }
+        return val;
+    }
+
     protected boolean joinQQGroup(String key) {
         Intent intent = new Intent();
         intent.setData(Uri.parse("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3D" + key));
@@ -183,9 +224,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PICK_FILE_REQUEST && data!=null) {
+        if (requestCode == PICK_FILE_REQUEST && data != null) {
             if (resultCode == RESULT_OK) {
-                ArrayList<Uri> selectedFiles  = data.getParcelableArrayListExtra(Constants.SELECTED_ITEMS);
+                ArrayList<Uri> selectedFiles = data.getParcelableArrayListExtra(Constants.SELECTED_ITEMS);
                 for (Uri file : selectedFiles) {
                     CopyModPack(file, false);
                 }
@@ -196,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_PERMISSION_CODE) {
             for (int i = 0; i < permissions.length; i++) {

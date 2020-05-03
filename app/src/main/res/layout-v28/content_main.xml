@@ -65,13 +65,13 @@
             android:gravity="center"
             android:lineHeight="30dp"
 
-            android:shadowColor="#ff000000"
+            android:shadowColor="#26000000"
             android:shadowDx="10"
             android:shadowDy="10"
-            android:shadowRadius="5"
+            android:shadowRadius="1"
 
 
-            android:text="CopyRight@ShanghaiWindy 2014-2020\n模组安装器版权归上海之风所有 2014-2020" tools:targetApi="p"/>
+            android:text="CopyRight@ShanghaiWindy 2014-2020\n模组安装器版权归上海之风所有 2014-2020" />
 
     </LinearLayout>
 

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Panzer War Mod Installer</string>
     <string name="action_settings">Setting</string>
-    <string name="select_fileTip">Click right-bottom button to select mod to install.</string>
+    <string name="select_fileTip">Click right-bottom button to select local mod to install.</string>
     <string name="view_mods">Click to view installed mods</string>
     <string name="invalidFile">Invalid File</string>
     <string name="lanuchGame">Lanuch Game</string>
@@ -11,4 +11,14 @@
     <string name="joinChatBtn">Join QQ Chat Group</string>
     <string name="copy_failed">Ops! Copy file failed.</string>
     <string name="copy_success">Copy File Succeed!</string>
+    <string name="viewCommunity">View Community</string>
+    <string name="title_downloadlink_list">Download Link</string>
+    <string name="title_downloadlink_detail">"Detail "</string>
+    <string name="NoFolder">No Folder</string>
+    <string name="NoFile">Not installed</string>
+    <string name="Downloaded">Downloaded</string>
+    <string name="Installed">Installed</string>
+    <string name="LoadingList">Loading...</string>
+    <string name="DownloadComplete">Download Complete</string>
+    <string name="downloadInitalize">Initialize Downloading...</string>
 </resources>
