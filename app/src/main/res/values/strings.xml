@@ -19,7 +19,7 @@
     <string name="Downloaded">Downloaded</string>
     <string name="Installed">Installed</string>
     <string name="LoadingList">Loading...</string>
-    <string name="DownloadComplete">Download Complete</string>
+    <string name="DownloadComplete">Download Complete! Launch game to enjoy it!</string>
     <string name="downloadInitalize">Initialize Downloading...</string>
     <string name="editTime">Edit Time:</string>
     <string name="description">Description:</string>

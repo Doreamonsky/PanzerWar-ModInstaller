@@ -44,7 +44,7 @@ public class Util {
         } else {
             if (new File(gamePath + modName + ".modpack").exists()) {
                 return FileState.Downloaded;
-            } else if (new File(gamePath + modName + ".installed").exists()) {
+            } else if (new File(gamePath + modName + ".installed").exists() || new File(gamePath + "../" + modName).exists()) {
                 return FileState.Installed;
             } else {
                 return FileState.NoFile;

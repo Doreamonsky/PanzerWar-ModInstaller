@@ -123,9 +123,15 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Uri uri = intent.getData();
 
-        if (uri != null) {
-            CopyModPack(uri, true);
+        try{
+            if (uri != null) {
+                CopyModPack(uri, true);
+            }
         }
+        catch (Exception exception){
+
+        }
+
 
         // 访问社区
         Button viewCommunityBtn = findViewById(R.id.viewCommunityBtn);

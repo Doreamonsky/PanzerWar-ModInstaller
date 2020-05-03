@@ -20,7 +20,7 @@
     <string name="Downloaded">已下载</string>
     <string name="Installed">已安装</string>
     <string name="LoadingList">加载列表中...</string>
-    <string name="DownloadComplete">下载成功!</string>
+    <string name="DownloadComplete">下载成功!启动游戏即可!</string>
     <string name="downloadInitalize">下载初始化中...</string>
     <string name="description">介绍:</string>
     <string name="size">大小:</string>
