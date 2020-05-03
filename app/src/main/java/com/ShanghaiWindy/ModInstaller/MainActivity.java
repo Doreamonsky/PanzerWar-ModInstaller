@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
         // 下载初始化
         FileDownloader.setup(this);
+        FileDownloader.getImpl().setMaxNetworkThreadCount(12);
 
         FloatingActionButton fab = findViewById(R.id.fab);
 

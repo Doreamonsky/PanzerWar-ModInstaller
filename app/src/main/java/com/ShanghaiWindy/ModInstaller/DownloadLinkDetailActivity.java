@@ -1,5 +1,6 @@
 package com.ShanghaiWindy.ModInstaller;
 
+import android.app.DownloadManager;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -9,6 +10,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.liulishuo.filedownloader.BaseDownloadTask;
 import com.liulishuo.filedownloader.FileDownloadLargeFileListener;
 import com.liulishuo.filedownloader.FileDownloader;
+import com.liulishuo.filedownloader.model.FileDownloadStatus;
 
 import androidx.appcompat.widget.Toolbar;
 
@@ -20,6 +22,9 @@ import androidx.appcompat.app.ActionBar;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.Hashtable;
 
 /**
  * An activity representing a single DownloadLink detail screen. This
@@ -28,6 +33,7 @@ import android.widget.TextView;
  * in a {@link DownloadLinkListActivity}.
  */
 public class DownloadLinkDetailActivity extends AppCompatActivity {
+    protected static Hashtable<String, Integer> downloadTasks = new Hashtable<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +42,8 @@ public class DownloadLinkDetailActivity extends AppCompatActivity {
 
         final String itemId = getIntent().getStringExtra(DownloadLinkDetailFragment.ARG_ITEM_ID);
         final LinkContent.LinkItem mItem = LinkContent.ITEM_MAP.get(itemId);
+
+        final String gamePath = Util.getGamePath();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
@@ -46,10 +54,22 @@ public class DownloadLinkDetailActivity extends AppCompatActivity {
             fab.setVisibility(View.GONE);
         }
 
+        if (downloadTasks.containsKey(mItem.link)) {
+            fab.setVisibility(View.GONE);
+            int id = downloadTasks.get(mItem.link);
+            long soFar = FileDownloader.getImpl().getSoFar(id);
+            long total = FileDownloader.getImpl().getTotal(id);
+
+            if (FileDownloader.getImpl().getStatusIgnoreCompleted(id) != FileDownloadStatus.INVALID_STATUS) {
+                Toast.makeText(this, String.format("Resume: %d / %d", soFar, total), Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, mItem.displayName + getResources().getText(R.string.DownloadComplete), Toast.LENGTH_SHORT).show();
+            }
+        }
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                final String gamePath = Util.getGamePath() + mItem.fileName + ".modpack";
                 final ProgressBar progressBar = (ProgressBar) findViewById(R.id.downloadProgressBar);
                 final TextView progressText = (TextView) findViewById(R.id.progress);
 
@@ -59,18 +79,26 @@ public class DownloadLinkDetailActivity extends AppCompatActivity {
                 progressText.setVisibility(View.VISIBLE);
                 fab.setVisibility(View.GONE);
 
-                FileDownloader.getImpl().create(mItem.link).setPath(gamePath).setListener(new FileDownloadLargeFileListener() {
+                final BaseDownloadTask downloadTask = FileDownloader.getImpl().create(mItem.link).setPath(gamePath, true);
+
+                downloadTask.setListener(new FileDownloadLargeFileListener() {
                     @Override
                     protected void pending(BaseDownloadTask task, long soFarBytes, long totalBytes) {
-
+                        if (progressText != null) {
+                            progressText.setText("Pending...");
+                        }
                     }
 
                     @Override
                     protected void progress(BaseDownloadTask task, long soFarBytes, long totalBytes) {
                         float progress = (float) soFarBytes / (float) totalBytes;
+                        float speed = (float) downloadTask.getSpeed();
 
-                        progressText.setText(String.format("%s / %s | %f ", soFarBytes, totalBytes, progress));
-                        progressBar.setProgress(Math.round(progressBar.getMax() * progress));
+                        if (progressText != null && progressBar != null) {
+                            progressText.setText(String.format("%s / %s | %f | %f KB/s", soFarBytes, totalBytes, progress, speed));
+                            progressBar.setProgress(Math.round(progressBar.getMax() * progress));
+                        }
+
                     }
 
                     @Override
@@ -80,22 +108,28 @@ public class DownloadLinkDetailActivity extends AppCompatActivity {
 
                     @Override
                     protected void completed(BaseDownloadTask task) {
-                        progressText.setText(getResources().getText(R.string.DownloadComplete));
-                        progressBar.setProgress(progressBar.getMax());
+                        if (progressText != null && progressBar != null) {
+                            progressText.setText(getResources().getText(R.string.DownloadComplete));
+                            progressBar.setProgress(progressBar.getMax());
 
-                        Snackbar.make(view, mItem.displayName + getResources().getText(R.string.DownloadComplete), Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                            Snackbar.make(view, mItem.displayName + getResources().getText(R.string.DownloadComplete), Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                        }
                     }
 
                     @Override
                     protected void error(BaseDownloadTask task, Throwable e) {
-                        progressBar.setProgress(0);
+                        Snackbar.make(view, e.getLocalizedMessage(), Snackbar.LENGTH_LONG).setAction("Action", null).show();
                     }
 
                     @Override
                     protected void warn(BaseDownloadTask task) {
 
                     }
-                }).start();
+                });
+
+                downloadTask.start();
+
+                downloadTasks.put(mItem.link, downloadTask.getId());
             }
         });
 
