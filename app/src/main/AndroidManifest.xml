@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.ShanghaiWindy.ModInstaller">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -35,34 +36,19 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <intent-filter>
+
+            <intent-filter android:scheme="http"
+                tools:ignore="AppLinkUrlError">
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="file" />
-                <data android:scheme="content" />
                 <data android:mimeType="*/*" />
-                <data android:host="*" />
-                <data android:pathPattern=".*\\.umodpack" />
-                <data android:pathPattern=".*\\..*\\.umodpack" />
-                <data android:pathPattern=".*\\..*\\..*\\.umodpack" />
-                <data android:pathPattern=".*\\..*\\..*\\..*\\.umodpack" />
-                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\.umodpack" />
-                <data android:pathPattern=".*\\.modpack" />
-                <data android:pathPattern=".*\\..*\\.modpack" />
-                <data android:pathPattern=".*\\..*\\..*\\.modpack" />
-                <data android:pathPattern=".*\\..*\\..*\\..*\\.modpack" />
-                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\.modpack" />
-                <data android:pathPattern=".*\\.zip" />
-                <data android:pathPattern=".*\\..*\\.zip" />
-                <data android:pathPattern=".*\\..*\\..*\\.zip" />
-                <data android:pathPattern=".*\\..*\\..*\\..*\\.zip" />
-                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\.zip" />
             </intent-filter>
+
         </activity>
-        <uses-library android:name="org.apache.http.legacy" android:required="false" />
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
 
     </application>
 

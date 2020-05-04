@@ -1,13 +1,17 @@
 package com.ShanghaiWindy.ModInstaller;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,7 +25,10 @@ import com.aditya.filebrowser.FileChooser;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -69,11 +76,9 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), FileChooser.class);
-                intent.putExtra(Constants.SELECTION_MODE, Constants.SELECTION_MODES.MULTIPLE_SELECTION.ordinal());
-                intent.putExtra(Constants.ALLOWED_FILE_EXTENSIONS, "umodpack;modpack;zip;;");
-
-                startActivityForResult(intent, PICK_FILE_REQUEST);
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("*/*");//无类型限制
+                startActivityForResult(intent, 1);
             }
         });
 
@@ -111,10 +116,6 @@ public class MainActivity extends AppCompatActivity {
         downloadModBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent();
-//                intent.setData(Uri.parse("http://yr6xv3.coding-pages.com/docs/"));
-//                intent.setAction(Intent.ACTION_VIEW);
-//                startActivity(intent);
                 Intent page = new Intent(MainActivity.this, DownloadLinkListActivity.class);
                 startActivity(page);
             }
@@ -124,15 +125,13 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Uri uri = intent.getData();
 
-        try{
-            if (uri != null) {
-                CopyModPack(uri, true);
+        if (uri != null) {
+            try {
+                CopyModPack(uri);
+            } catch (IOException e) {
+                Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
             }
         }
-        catch (Exception exception){
-
-        }
-
 
         // 访问社区
         Button viewCommunityBtn = findViewById(R.id.viewCommunityBtn);
@@ -151,55 +150,53 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    protected void CopyModPack(Uri uri, boolean isRequireParese) {
-        Log.e("main", uri.toString());
-        String selectPath = isRequireParese ? Util.getPath(this, uri) : uri.getPath();
+    private String GetFileNameFromUri(Uri uri) {
+        Cursor mCursor = getApplicationContext().getContentResolver().query(uri, null, null, null, null);
+        int indexed_name = mCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+        mCursor.moveToFirst();
+        String filename = mCursor.getString(indexed_name);
+        mCursor.close();
+        return filename;
+    }
 
-        TextView pathLabel = findViewById(R.id.pathLabel);
+    protected void CopyModPack(Uri uri) throws IOException {
+        String fileName = GetFileNameFromUri(uri);
+        String destination = Util.getGamePath() + fileName;
 
-        if (selectPath.indexOf("modpack") == -1 && selectPath.indexOf("zip") == -1) {
-            Toast.makeText(getApplicationContext(), R.string.invalidFile, Toast.LENGTH_LONG).show();
+        if (!fileName.contains("modpack")) {
+            Snackbar.make(findViewById(R.id.main), fileName + " " + getResources().getText(R.string.InstallFailedInvalid), Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            return;
+        }
+        if (fileName.contains("(")) {
+            Snackbar.make(findViewById(R.id.main), fileName + " " + getResources().getText(R.string.InstallFailedInvalidName), Snackbar.LENGTH_LONG).setAction("Action", null).show();
             return;
         }
 
-        Toast.makeText(getApplicationContext(), String.format("%s %s", R.string.select_file_path, selectPath), Toast.LENGTH_LONG).show();
-
-        // 模组文件
-        File modPackFile = new File(selectPath);
-
-        // 安装目录路径
-        String modPath = Util.getGamePath();
-
-        if (modPath == "") {
-            pathLabel.setText(R.string.folder_not_found);
-            Toast.makeText(getApplicationContext(), R.string.folder_not_found, Toast.LENGTH_LONG).show();
+        if (!fileName.contains("Android")) {
+            Snackbar.make(findViewById(R.id.main), fileName + " " + getResources().getText(R.string.InstallFailedInvalidPlatform), Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            return;
         }
 
-        File destFile = new File(modPath + modPackFile.getName());
-
-        if (destFile.exists()) {
-            destFile.delete();
+        if (fileName.contains("umodpack")) {
+            Toast.makeText(this, fileName + " " + getResources().getText(R.string.InstallPaidMod), Toast.LENGTH_SHORT).show();
         }
 
-        boolean isSuccess = true;
+        InputStream inputStream = getContentResolver().openInputStream(uri);
 
-        try {
-            Util.copyFile(modPackFile, destFile);
-        } catch (IOException e) {
-            Log.e("main", "Copy Failed! Orz! Ops!");
-            Toast.makeText(this, R.string.copy_failed, Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
+        byte[] bytes = new byte[2048];
+        int index;
 
-            isSuccess = false;
+        FileOutputStream installedFile = new FileOutputStream(destination);
+
+        while ((index = inputStream.read(bytes)) != -1) {
+            installedFile.write(bytes, 0, index);
+            installedFile.flush();
         }
 
-        if (isSuccess) {
-            pathLabel.setText(String.format("%s %s", R.string.copy_success, destFile.getAbsolutePath())); //文件安装至路径
-            Toast.makeText(this, R.string.copy_success, Toast.LENGTH_SHORT).show();
-            modPackFile.delete();
-        } else {
-            pathLabel.setText(R.string.copy_failed);
-        }
+        installedFile.close();
+        inputStream.close();
+
+        Snackbar.make(findViewById(R.id.main), fileName + " " + getResources().getText(R.string.DownloadComplete), Snackbar.LENGTH_LONG).setAction("Action", null).show();
     }
 
     protected boolean hasPackage(Context context, String pkgName) {
@@ -231,17 +228,34 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PICK_FILE_REQUEST && data != null) {
-            if (resultCode == RESULT_OK) {
-                ArrayList<Uri> selectedFiles = data.getParcelableArrayListExtra(Constants.SELECTED_ITEMS);
-                for (Uri file : selectedFiles) {
-                    CopyModPack(file, false);
-                }
+        if (resultCode == Activity.RESULT_OK) {
+            Uri uri = data.getData();
+            try {
+                CopyModPack(uri);
+            } catch (IOException e) {
+                Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
             }
         }
 
         super.onActivityResult(requestCode, resultCode, data);
     }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if (requestCode == PICK_FILE_REQUEST && data != null) {
+//            if (resultCode == RESULT_OK) {
+//                ArrayList<Uri> selectedFiles = data.getParcelableArrayListExtra(Constants.SELECTED_ITEMS);
+//                for (Uri file : selectedFiles) {
+//                    try {
+//                        CopyModPack(file);
+//                    } catch (IOException e) {
+//                        Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//            }
+//        }
+//
+//        super.onActivityResult(requestCode, resultCode, data);
+//    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {

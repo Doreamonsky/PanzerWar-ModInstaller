@@ -27,4 +27,8 @@
     <string name="author">作者:</string>
     <string name="editTime">更新时间:</string>
     <string name="DownloadType">点击红色按钮进行下载!</string>
+    <string name="InstallFailedInvalidName">错误的文件名字!文件名不可包含如(1)的字样!</string>
+    <string name="InstallFailedInvalidPlatform">错误的平台!请安装安卓版模组!</string>
+    <string name="InstallPaidMod">警告!你正在安装付费模组!付费模组需要密钥进行激活使用!</string>
+    <string name="InstallFailedInvalid">错误的模组文件!</string>
 </resources>

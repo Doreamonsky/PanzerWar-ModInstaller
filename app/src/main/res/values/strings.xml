@@ -26,4 +26,8 @@
     <string name="size">Size:</string>
     <string name="author">Author:</string>
     <string name="DownloadType">Click Red Button to download!</string>
+    <string name="InstallFailedInvalidName">Invalid Name! Do not contain strings like (1) in the file name!</string>
+    <string name="InstallFailedInvalidPlatform">Invalid Platform!Download Android version modpack plz!</string>
+    <string name="InstallPaidMod">Warning!You are install a paid mod which requre a key to active to use!</string>
+    <string name="InstallFailedInvalid">Invalid Mod File!</string>
 </resources>
