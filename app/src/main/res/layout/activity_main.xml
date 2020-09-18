@@ -23,13 +23,25 @@
 
     <include layout="@layout/content_main" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
+        android:text="@string/pickFile"
         app:backgroundTint="#E91E63"
-        app:srcCompat="@drawable/file" />
+        app:iconSize="16dp" />
+
+<!--    app:icon="@drawable/file"-->
+
+    <!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--        android:id="@+id/fab"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="bottom|end"-->
+<!--        android:layout_margin="@dimen/fab_margin"-->
+<!--        app:backgroundTint="#E91E63"-->
+<!--        app:srcCompat="@drawable/file" />-->
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

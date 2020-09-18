@@ -1,11 +1,12 @@
-package com.ShanghaiWindy.ModInstaller;
+package com.ShanghaiWindy.ModInstaller.DownloadLink;
 
-import android.app.DownloadManager;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.ShanghaiWindy.ModInstaller.dummy.LinkContent;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.ShanghaiWindy.ModInstaller.R;
+import com.ShanghaiWindy.ModInstaller.Util;
+import com.ShanghaiWindy.ModInstaller.Dummy.ModLinkContent;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.liulishuo.filedownloader.BaseDownloadTask;
 import com.liulishuo.filedownloader.FileDownloadLargeFileListener;
@@ -41,14 +42,14 @@ public class DownloadLinkDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_downloadlink_detail);
 
         final String itemId = getIntent().getStringExtra(DownloadLinkDetailFragment.ARG_ITEM_ID);
-        final LinkContent.LinkItem mItem = LinkContent.ITEM_MAP.get(itemId);
+        final ModLinkContent.ModLinkItem mItem = ModLinkContent.ITEM_MAP.get(itemId);
 
         final String gamePath = Util.getGamePath();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
 
-        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final MaterialButton fab = (MaterialButton) findViewById(R.id.fab);
 
         if (mItem.fileState != Util.FileState.NoFile) {
             fab.setVisibility(View.GONE);

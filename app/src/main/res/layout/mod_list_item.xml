@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="30dp"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/folder_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="25px"
+        android:layout_weight="80"
+        android:lines="1"
+        android:text="Template Folder"
+        android:textAlignment="textStart"
+        android:textAppearance="?attr/textAppearanceListItem" />
+
+        <Button
+            android:id="@+id/uninstall_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="15px"
+            android:layout_weight="30"
+            android:textSize="12dp"
+            android:text="@string/uninstall"
+            />
+</LinearLayout>

@@ -29,6 +29,7 @@
             android:id="@+id/downloadModBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="#00BFA5"
             android:text="@string/downloadModBtn" />
 
         <Button
@@ -44,9 +45,16 @@
             android:text="@string/viewCommunity" />
 
         <Button
+            android:id="@+id/checkVersion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/checkVersion" />
+
+        <Button
             android:id="@+id/lanuchGameBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="#00BFA5"
             android:text="@string/lanuchGame" />
 
         <TextView
@@ -66,12 +74,13 @@
             android:lineHeight="30dp"
 
             android:shadowColor="#ff000000"
-            android:shadowDx="10"
-            android:shadowDy="10"
+            android:shadowDx="5"
+            android:shadowDy="5"
             android:shadowRadius="5"
 
 
-            android:text="CopyRight@ShanghaiWindy 2014-2020\n模组安装器版权归上海之风所有 2014-2020" tools:targetApi="p"/>
+            android:text="CopyRight@ShanghaiWindy 2014-2020\n游戏助手版权归上海之风所有 2014-2020\n本安装软件免费且开源"
+            tools:targetApi="p" />
 
     </LinearLayout>
 

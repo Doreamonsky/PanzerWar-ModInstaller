@@ -2,7 +2,6 @@ package com.ShanghaiWindy.ModInstaller;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,28 +9,20 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.aditya.filebrowser.Constants;
-import com.aditya.filebrowser.FileChooser;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.ShanghaiWindy.ModInstaller.DownloadLink.DownloadLinkListActivity;
+import com.google.android.material.button.MaterialButton;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
 //import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,7 +31,6 @@ import androidx.core.app.ActivityCompat;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.liulishuo.filedownloader.FileDownloader;
-import com.taptap.sdk.*;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -56,22 +46,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // 申请读写权
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, PERMISSIONS_STORAGE, REQUEST_PERMISSION_CODE);
-            }
-        }
-
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // 下载初始化
+        // 下载初始化v
         FileDownloader.setup(this);
         FileDownloader.getImpl().setMaxNetworkThreadCount(12);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+        MaterialButton fab = findViewById(R.id.fab);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,10 +71,21 @@ public class MainActivity extends AppCompatActivity {
         viewModBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent page = new Intent(MainActivity.this, ModList.class);
+                Intent page = new Intent(MainActivity.this, ModFolderActivity.class);
                 startActivity(page);
             }
         });
+
+        Button viewCommunityBtn = findViewById(R.id.viewCommunityBtn);
+        viewCommunityBtn.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent webPage = new Intent(MainActivity.this, BlogWeb.class);
+                        startActivity(webPage);
+                    }
+                }
+        );
 
         //  启动游戏
         Button lanuchGameBtn = findViewById(R.id.lanuchGameBtn);
@@ -112,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // 下载模组页面
         Button downloadModBtn = findViewById(R.id.downloadModBtn);
         downloadModBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,24 +126,17 @@ public class MainActivity extends AppCompatActivity {
                 CopyModPack(uri);
             } catch (IOException e) {
                 Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
             }
         }
 
-        // 访问社区
-        Button viewCommunityBtn = findViewById(R.id.viewCommunityBtn);
-        viewCommunityBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TapTapSdk.Config config = new TapTapSdk.Config();
-                config.appid = "145106";
-                config.orientation = TapTapSdk.ORIENTATION_PORTRAIT;
-                config.uri = null;
-                config.locale = Locale.CHINA;
-                config.site = "cn";
-                TapTapSdk.openTapTapForum(MainActivity.this, config);
+        // 申请读写权
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, PERMISSIONS_STORAGE, REQUEST_PERMISSION_CODE);
             }
-        });
-
+        }
     }
 
     private String GetFileNameFromUri(Uri uri) {
@@ -183,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
 
         InputStream inputStream = getContentResolver().openInputStream(uri);
 
-        byte[] bytes = new byte[2048];
+        byte[] bytes = new byte[1024];
         int index;
 
         FileOutputStream installedFile = new FileOutputStream(destination);
@@ -213,18 +202,6 @@ public class MainActivity extends AppCompatActivity {
         return val;
     }
 
-    protected boolean joinQQGroup(String key) {
-        Intent intent = new Intent();
-        intent.setData(Uri.parse("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3D" + key));
-        // 此Flag可根据具体产品需要自定义，如设置，则在加群界面按返回，返回手Q主界面，不设置，按返回会返回到呼起产品界面    //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        try {
-            startActivity(intent);
-            return true;
-        } catch (Exception e) {
-            // 未安装手Q或安装的版本不支持
-            return false;
-        }
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -234,28 +211,13 @@ public class MainActivity extends AppCompatActivity {
                 CopyModPack(uri);
             } catch (IOException e) {
                 Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
             }
         }
 
         super.onActivityResult(requestCode, resultCode, data);
     }
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        if (requestCode == PICK_FILE_REQUEST && data != null) {
-//            if (resultCode == RESULT_OK) {
-//                ArrayList<Uri> selectedFiles = data.getParcelableArrayListExtra(Constants.SELECTED_ITEMS);
-//                for (Uri file : selectedFiles) {
-//                    try {
-//                        CopyModPack(file);
-//                    } catch (IOException e) {
-//                        Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//            }
-//        }
-//
-//        super.onActivityResult(requestCode, resultCode, data);
-//    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {

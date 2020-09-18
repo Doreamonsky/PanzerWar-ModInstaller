@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">装甲纷争-模组安装器</string>
+    <string name="app_name">装甲纷争游戏助手</string>
     <string name="action_settings">设置</string>
     <string name="select_fileTip">点击右下角按钮安装本地ModPack文件</string>
     <string name="view_mods">查看已装模组</string>
@@ -12,7 +12,7 @@
     <string name="joinChatBtn">加群下载模组</string>
     <string name="copy_failed">糟糕！复制文件失败！</string>
     <string name="copy_success">安装文件成功！</string>
-    <string name="viewCommunity">讨论与攻略</string>
+    <string name="viewCommunity">游戏社区</string>
     <string name="title_downloadlink_list">下载列表</string>
     <string name="title_downloadlink_detail">详情</string>
     <string name="NoFolder">无读写权限</string>
@@ -31,4 +31,10 @@
     <string name="InstallFailedInvalidPlatform">错误的平台!请安装安卓版模组!</string>
     <string name="InstallPaidMod">警告!你正在安装付费模组!付费模组需要密钥进行激活使用!</string>
     <string name="InstallFailedInvalid">错误的模组文件!</string>
+    <string name="pickFile">选择文件</string>
+    <string name="downloadFile">下载</string>
+    <string name="linkRefresh">刷新</string>
+    <string name="joinGroup">加入QQ群</string>
+    <string name="checkVersion">更新版本</string>
+    <string name="uninstall" >卸载</string>
 </resources>

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Panzer War Mod Installer</string>
+    <string name="app_name">Panzer War Game Helper</string>
     <string name="action_settings">Setting</string>
     <string name="select_fileTip">Click right-bottom button to select local mod to install.</string>
     <string name="view_mods">Click to view installed mods</string>
@@ -30,4 +30,10 @@
     <string name="InstallFailedInvalidPlatform">Invalid Platform!Download Android version modpack plz!</string>
     <string name="InstallPaidMod">Warning!You are install a paid mod which requre a key to active to use!</string>
     <string name="InstallFailedInvalid">Invalid Mod File!</string>
+    <string name="pickFile">pickFile</string>
+    <string name="downloadFile">Download</string>
+    <string name="linkRefresh">Refresh</string>
+    <string name="joinGroup">Join group</string>
+    <string name="checkVersion">Update Version</string>
+    <string name="uninstall"> Unistall</string>
 </resources>

@@ -1,8 +1,10 @@
-package com.ShanghaiWindy.ModInstaller;
+package com.ShanghaiWindy.ModInstaller.DownloadLink;
 
 import android.app.Activity;
 import android.os.Bundle;
 
+import com.ShanghaiWindy.ModInstaller.R;
+import com.ShanghaiWindy.ModInstaller.Util;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 import androidx.fragment.app.Fragment;
@@ -12,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.ShanghaiWindy.ModInstaller.dummy.LinkContent;
+import com.ShanghaiWindy.ModInstaller.Dummy.ModLinkContent;
 
 /**
  * A fragment representing a single DownloadLink detail screen.
@@ -30,7 +32,7 @@ public class DownloadLinkDetailFragment extends Fragment {
     /**
      * The dummy displayName this fragment is presenting.
      */
-    private LinkContent.LinkItem mItem;
+    private ModLinkContent.ModLinkItem mItem;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -47,7 +49,7 @@ public class DownloadLinkDetailFragment extends Fragment {
             // Load the dummy displayName specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load displayName from a displayName provider.
-            mItem = LinkContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
+            mItem = ModLinkContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
 
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);

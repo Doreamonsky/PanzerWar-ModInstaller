@@ -1,4 +1,4 @@
-package com.ShanghaiWindy.ModInstaller;
+package com.ShanghaiWindy.ModInstaller.DownloadLink;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,13 +9,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
 
+import com.ShanghaiWindy.ModInstaller.R;
+import com.ShanghaiWindy.ModInstaller.Util;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import android.view.LayoutInflater;
@@ -23,7 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.ShanghaiWindy.ModInstaller.dummy.LinkContent;
+import com.ShanghaiWindy.ModInstaller.Dummy.ModLinkContent;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,13 +44,6 @@ import java.util.List;
  * item description side-by-side using two vertical panes.
  */
 public class DownloadLinkListActivity extends AppCompatActivity {
-
-    /**
-     * Whether or not the activity is in two-pane mode, i.e. running on a tablet
-     * device.
-     */
-    private boolean mTwoPane;
-
     private SimpleItemRecyclerViewAdapter simpleItemRecyclerViewAdapter;
 
     @Override
@@ -60,7 +55,7 @@ public class DownloadLinkListActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        MaterialButton fab = (MaterialButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -68,14 +63,6 @@ public class DownloadLinkListActivity extends AppCompatActivity {
                 Snackbar.make(view, getResources().getText(R.string.LoadingList), Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
         });
-
-        if (findViewById(R.id.downloadlink_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
-            mTwoPane = true;
-        }
 
         final View recyclerView = findViewById(R.id.downloadlink_list);
         assert recyclerView != null;
@@ -87,13 +74,13 @@ public class DownloadLinkListActivity extends AppCompatActivity {
 
     private void RefreshList() {
 
-        LinkContent.removeAll();
+        ModLinkContent.removeAll();
         simpleItemRecyclerViewAdapter.notifyDataSetChanged();
 
         // 请求获取json
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 
-        List<String> reporisties = Arrays.asList("https://res.waroftanks.cn/", "https://baomage.github.io/BaoMaGe/");
+        List<String> reporisties = Arrays.asList("https://res.waroftanks.cn/", "https://baomao.waroftanks.cn/");
 
 
         for (Iterator<String> it = reporisties.iterator(); it.hasNext(); ) {
@@ -150,9 +137,9 @@ public class DownloadLinkListActivity extends AppCompatActivity {
                                     break;
                             }
 
-                            int id = LinkContent.ITEMS.size() + 1;
+                            int id = ModLinkContent.ITEMS.size() + 1;
 
-                            LinkContent.addItem(new LinkContent.LinkItem(Integer.toString(id), fileState, installStateText, displayName, description, link, packName, size, author, editTime));
+                            ModLinkContent.addItem(new ModLinkContent.ModLinkItem(Integer.toString(id), fileState, installStateText, displayName, description, link, packName, size, author, editTime));
                         }
 
                         simpleItemRecyclerViewAdapter.notifyDataSetChanged();
@@ -174,7 +161,7 @@ public class DownloadLinkListActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(RecyclerView recyclerView) {
-        simpleItemRecyclerViewAdapter = new SimpleItemRecyclerViewAdapter(this, LinkContent.ITEMS, mTwoPane);
+        simpleItemRecyclerViewAdapter = new SimpleItemRecyclerViewAdapter(this, ModLinkContent.ITEMS);
         recyclerView.setAdapter(simpleItemRecyclerViewAdapter);
     }
 
@@ -182,36 +169,24 @@ public class DownloadLinkListActivity extends AppCompatActivity {
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final DownloadLinkListActivity mParentActivity;
-        private final List<LinkContent.LinkItem> mValues;
-        private final boolean mTwoPane;
+        private final List<ModLinkContent.ModLinkItem> mValues;
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LinkContent.LinkItem item = (LinkContent.LinkItem) view.getTag();
-                if (mTwoPane) {
-                    Bundle arguments = new Bundle();
-                    arguments.putString(DownloadLinkDetailFragment.ARG_ITEM_ID, item.id);
-                    DownloadLinkDetailFragment fragment = new DownloadLinkDetailFragment();
-                    fragment.setArguments(arguments);
-                    mParentActivity.getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.downloadlink_detail_container, fragment)
-                            .commit();
-                } else {
-                    Context context = view.getContext();
-                    Intent intent = new Intent(context, DownloadLinkDetailActivity.class);
-                    intent.putExtra(DownloadLinkDetailFragment.ARG_ITEM_ID, item.id);
+                ModLinkContent.ModLinkItem item = (ModLinkContent.ModLinkItem) view.getTag();
 
-                    context.startActivity(intent);
-                }
+                Context context = view.getContext();
+                Intent intent = new Intent(context, DownloadLinkDetailActivity.class);
+                intent.putExtra(DownloadLinkDetailFragment.ARG_ITEM_ID, item.id);
+
+                context.startActivity(intent);
             }
         };
 
         SimpleItemRecyclerViewAdapter(DownloadLinkListActivity parent,
-                                      List<LinkContent.LinkItem> items,
-                                      boolean twoPane) {
+                                      List<ModLinkContent.ModLinkItem> items) {
             mValues = items;
             mParentActivity = parent;
-            mTwoPane = twoPane;
         }
 
         @Override

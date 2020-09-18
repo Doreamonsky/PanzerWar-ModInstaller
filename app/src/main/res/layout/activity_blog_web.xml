@@ -4,14 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ModList">
+    tools:context=".BlogWeb">
 
-    <ListView
-        android:id="@+id/modListView"
+    <TextView
+        android:id="@+id/editText"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:ems="10"
+        android:text="Loading..." />
+
+    <WebView
+        android:id="@+id/web_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </WebView>
 </androidx.constraintlayout.widget.ConstraintLayout>

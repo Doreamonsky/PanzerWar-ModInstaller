@@ -5,19 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".DownloadLinkListActivity">
+    tools:context=".DownloadLink.DownloadLinkListActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            android:layout_height="?attr/actionBarSize" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -30,13 +29,13 @@
         <include layout="@layout/downloadlink_list" />
     </FrameLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/refresh" />
-
-
+        android:text="@string/linkRefresh"
+        app:backgroundTint="#E91E63"
+        app:iconSize="16dp" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

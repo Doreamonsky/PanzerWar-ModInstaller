@@ -9,5 +9,5 @@
     android:layout_marginLeft="0dp"
     android:layout_marginRight="0dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context=".DownloadLinkListActivity"
+    tools:context=".DownloadLink.DownloadLinkListActivity"
     tools:listitem="@layout/downloadlink_list_content" />
