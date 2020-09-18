@@ -6,16 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".BlogWeb">
 
-    <TextView
-        android:id="@+id/editText"
+    <ProgressBar
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:ems="10"
-        android:text="Loading..." />
+        android:scaleX="0.2"
+        android:scaleY="0.2" />
 
     <WebView
         android:id="@+id/web_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </WebView>
+        android:layout_height="match_parent"
+        android:visibility="invisible" />
 </androidx.constraintlayout.widget.ConstraintLayout>

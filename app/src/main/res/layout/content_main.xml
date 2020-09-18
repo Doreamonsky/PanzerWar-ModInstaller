@@ -26,10 +26,16 @@
         app:layout_constraintVertical_bias="0.0">
 
         <Button
-            android:id="@+id/downloadModBtn"
+            android:id="@+id/download_game_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="#00BFA5"
+            android:text="@string/download_game_btn" />
+
+        <Button
+            android:id="@+id/downloadModBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="@string/downloadModBtn" />
 
         <Button
@@ -39,16 +45,17 @@
             android:text="@string/view_mods" />
 
         <Button
-            android:id="@+id/viewCommunityBtn"
+            android:id="@+id/view_blog_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/viewCommunity" />
+            android:text="@string/view_blog" />
 
         <Button
-            android:id="@+id/checkVersion"
+            android:id="@+id/view_community_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/checkVersion" />
+            android:text="@string/view_community" />
+
 
         <Button
             android:id="@+id/lanuchGameBtn"

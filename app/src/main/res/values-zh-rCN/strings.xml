@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">装甲纷争游戏助手</string>
+    <string name="app_name">装甲纷争助手</string>
     <string name="action_settings">设置</string>
     <string name="select_fileTip">点击右下角按钮安装本地ModPack文件</string>
     <string name="view_mods">查看已装模组</string>
@@ -12,7 +12,7 @@
     <string name="joinChatBtn">加群下载模组</string>
     <string name="copy_failed">糟糕！复制文件失败！</string>
     <string name="copy_success">安装文件成功！</string>
-    <string name="viewCommunity">游戏社区</string>
+    <string name="view_blog">查看情报站</string>
     <string name="title_downloadlink_list">下载列表</string>
     <string name="title_downloadlink_detail">详情</string>
     <string name="NoFolder">无读写权限</string>
@@ -36,5 +36,13 @@
     <string name="linkRefresh">刷新</string>
     <string name="joinGroup">加入QQ群</string>
     <string name="checkVersion">更新版本</string>
-    <string name="uninstall" >卸载</string>
+    <string name="uninstall">卸载</string>
+    <string name="download_tip">本工具仅可用于下载官方渠道版装甲纷争，且需自己比对本地版本号决定是否下载安装包。</string>
+    <string name="download_game_btn">下载游戏</string>
+    <string name="update_log_btn">查看更新日志</string>
+    <string name="local_version">本地版本: </string>
+    <string name="server_version">最新版本: </string>
+    <string name="install_permission">请给此应用安装应用的权限!</string>
+    <string name="view_community">游戏社区</string>
+    <string name="progress">下载进度:</string>
 </resources>

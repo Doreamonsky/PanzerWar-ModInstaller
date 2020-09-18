@@ -6,7 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorOnBackground">@color/bootstrap_well_background</item>
+        <item name="colorOnBackground">@color/colorAccent</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

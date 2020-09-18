@@ -4,7 +4,9 @@
     package="com.ShanghaiWindy.ModInstaller">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.INTERNET" />
+
 
     <application
         android:allowBackup="true"
@@ -13,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".BlogWeb"></activity>
+        <activity android:name=".DownloadGame"></activity>
+        <activity android:name=".BlogWeb" />
         <activity
             android:name=".DownloadLink.DownloadLinkListActivity"
             android:label="@string/title_downloadlink_list"
@@ -48,9 +51,21 @@
             </intent-filter>
         </activity>
 
+
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
+
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.ShanghaiWindy.ModInstaller.fileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_provider_paths" />
+        </provider>
     </application>
 
 </manifest>

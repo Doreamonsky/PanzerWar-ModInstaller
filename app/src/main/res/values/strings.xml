@@ -11,7 +11,7 @@
     <string name="joinChatBtn">Join QQ Chat Group</string>
     <string name="copy_failed">Ops! Copy file failed.</string>
     <string name="copy_success">Copy File Succeed!</string>
-    <string name="viewCommunity">View Community</string>
+    <string name="view_blog">View News</string>
     <string name="title_downloadlink_list">Download Link</string>
     <string name="title_downloadlink_detail">"Detail "</string>
     <string name="NoFolder">No Folder</string>
@@ -36,4 +36,12 @@
     <string name="joinGroup">Join group</string>
     <string name="checkVersion">Update Version</string>
     <string name="uninstall"> Unistall</string>
+    <string name="download_tip">The tool can only download free version of Panzer War in China.</string>
+    <string name="download_game_btn">Download Game</string>
+    <string name="update_log_btn">Check Update Log</string>
+    <string name="local_version">Local Version: </string>
+    <string name="server_version">Server Version: </string>
+    <string name="install_permission">Please give this app permission to install apks.</string>
+    <string name="view_community">View Community</string>
+    <string name="progress">Progress</string>
 </resources>

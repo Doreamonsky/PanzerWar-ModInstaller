@@ -14,6 +14,11 @@ public class ModFolderContent {
         ITEM_MAP.put(item.id, item);
     }
 
+    public static void remove(String id) {
+        ITEMS.remove(id);
+        ITEM_MAP.remove(id);
+    }
+
     public static void removeAll() {
         ITEMS.clear();
         ITEM_MAP.clear();

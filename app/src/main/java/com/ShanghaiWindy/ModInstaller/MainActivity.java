@@ -2,6 +2,7 @@ package com.ShanghaiWindy.ModInstaller;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -40,7 +41,9 @@ public class MainActivity extends AppCompatActivity {
 
     private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE};
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.REQUEST_INSTALL_PACKAGES
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +79,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button viewCommunityBtn = findViewById(R.id.viewCommunityBtn);
-        viewCommunityBtn.setOnClickListener(
+        // 开发者日志界面
+        Button viewBlogBtn = findViewById(R.id.view_blog_btn);
+        viewBlogBtn.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -107,6 +111,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // 下载游戏页面
+        Button downloadGameBtn = findViewById(R.id.download_game_btn);
+        downloadGameBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent page = new Intent(MainActivity.this, DownloadGame.class);
+                startActivity(page);
+            }
+        });
+
+
         // 下载模组页面
         Button downloadModBtn = findViewById(R.id.downloadModBtn);
         downloadModBtn.setOnClickListener(new View.OnClickListener() {
@@ -114,6 +129,23 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent page = new Intent(MainActivity.this, DownloadLinkListActivity.class);
                 startActivity(page);
+            }
+        });
+
+        Button communityBtn = findViewById(R.id.view_community_btn);
+        communityBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String urlString = "https://blog.waroftanks.cn";
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlString));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.setPackage("com.android.chrome");
+                try {
+                    startActivity(intent);
+                } catch (ActivityNotFoundException ex) {
+                    intent.setPackage(null);
+                    startActivity(intent);
+                }
             }
         });
 

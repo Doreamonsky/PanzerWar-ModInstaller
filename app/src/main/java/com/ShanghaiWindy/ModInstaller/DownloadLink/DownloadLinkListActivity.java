@@ -80,7 +80,7 @@ public class DownloadLinkListActivity extends AppCompatActivity {
         // 请求获取json
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 
-        List<String> reporisties = Arrays.asList("https://res.waroftanks.cn/", "https://baomao.waroftanks.cn/");
+        List<String> reporisties = Arrays.asList("https://resv2.waroftanks.cn/", "https://baomao.waroftanks.cn/");
 
 
         for (Iterator<String> it = reporisties.iterator(); it.hasNext(); ) {

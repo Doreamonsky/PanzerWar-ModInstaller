@@ -1,5 +1,7 @@
 package com.ShanghaiWindy.ModInstaller;
 
+import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -8,10 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,7 +23,7 @@ import com.ShanghaiWindy.ModInstaller.Dummy.ModFolderContent;
 
 
 public class ModFolderActivity extends AppCompatActivity {
-    private ModFolderItemAdapter simpleItemRecyclerViewAdapter;
+    private static ModFolderItemAdapter modFolderItemAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,31 +31,30 @@ public class ModFolderActivity extends AppCompatActivity {
         setContentView(R.layout.activity_mod_folder);
 
         final RecyclerView recyclerView = findViewById(R.id.mod_list_view);
-        simpleItemRecyclerViewAdapter = new ModFolderItemAdapter(ModFolderContent.ITEMS);
-        recyclerView.setAdapter(simpleItemRecyclerViewAdapter);
+        modFolderItemAdapter = new ModFolderItemAdapter(ModFolderContent.ITEMS);
+        recyclerView.setAdapter(modFolderItemAdapter);
 
 
+        UpdateFolderList();
+    }
+
+    private static void UpdateFolderList() {
         String modPath = Environment.getExternalStorageDirectory().getPath() + "/Android/data/com.shanghaiwindy.PanzerWarOpenSource/files/mods/";
         File modDic = new File(modPath);
 
         if (!modDic.exists()) {
             return;
         }
-
-        List<String> modFileNames = new ArrayList<String>();
+        ModFolderContent.removeAll();
 
         for (File file : modDic.listFiles()) {
             if (file.getName().contains("Android")) {
                 String displayName = file.getName().replace("Android_", "").replace("Vehicle-", "");
-                ModFolderContent.addItem(new ModFolderContent.ModFolderItem("0", displayName, file.getAbsolutePath()));
+                ModFolderContent.addItem(new ModFolderContent.ModFolderItem(UUID.randomUUID().toString(), displayName, file.getAbsolutePath()));
             }
         }
-//        ListView listView = findViewById(R.id.modListView);
-//        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.mod_list_view, R.id.modFileText, modFileNames);
-//        listView.setAdapter(arrayAdapter);
 
-        simpleItemRecyclerViewAdapter.notifyDataSetChanged();
-
+        modFolderItemAdapter.notifyDataSetChanged();
     }
 
     public static class ModFolderItemAdapter
@@ -71,15 +73,32 @@ public class ModFolderActivity extends AppCompatActivity {
             return new ModFolderItemViewHolder(view);
         }
 
+        private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ModFolderContent.ModFolderItem item = (ModFolderContent.ModFolderItem) view.getTag();
+
+                Log.i("info", item.realFolder);
+
+                File uninstallTarget = new File(item.realFolder);
+                File[] files = uninstallTarget.listFiles();
+
+                for (File file : files) {
+                    file.delete();
+                }
+                uninstallTarget.delete();
+
+                UpdateFolderList();
+
+                Log.i("info", item.realFolder);
+            }
+        };
+
         @Override
         public void onBindViewHolder(ModFolderItemViewHolder holder, int position) {
             holder.mFolderName.setText(mValues.get(position).displayFolder);
-            holder.mUninstallButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Log.i("test", "clicked");
-                }
-            });
+            holder.mUninstallButton.setTag(mValues.get(position));
+            holder.mUninstallButton.setOnClickListener(mOnClickListener);
         }
 
         @Override
@@ -93,6 +112,7 @@ public class ModFolderActivity extends AppCompatActivity {
 
             ModFolderItemViewHolder(View view) {
                 super(view);
+
                 mFolderName = view.findViewById(R.id.folder_name);
                 mUninstallButton = view.findViewById(R.id.uninstall_btn);
             }
