@@ -25,13 +25,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-//import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.liulishuo.filedownloader.FileDownloader;
+import com.tencent.bugly.Bugly;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -53,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        Bugly.init(getApplicationContext(), "c98e6161e2", true);
 
         // 下载初始化v
         FileDownloader.setup(this);

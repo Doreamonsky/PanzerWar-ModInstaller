@@ -1,6 +1,7 @@
 package com.ShanghaiWindy.ModInstaller;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
@@ -39,12 +40,14 @@ public class ModFolderActivity extends AppCompatActivity {
     }
 
     private static void UpdateFolderList() {
-        String modPath = Environment.getExternalStorageDirectory().getPath() + "/Android/data/com.shanghaiwindy.PanzerWarOpenSource/files/mods/";
-        File modDic = new File(modPath);
+        String gamePath = Util.getGamePath();
 
-        if (!modDic.exists()) {
+        if (gamePath == "") {
             return;
         }
+
+        File modDic = new File(gamePath + "../");
+
         ModFolderContent.removeAll();
 
         for (File file : modDic.listFiles()) {
